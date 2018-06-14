@@ -28,10 +28,7 @@ consensus = summary_align.dumb_consensus(threshold=0.95,ambiguous='X') # 0.95  a
 
 a = consensus.split('X')
 
-pr_list = []
-for i in a:
-	if len(i) > 17:
-		pr_list.append(i)
+pr_list = list(filter(lambda x: len(x) > 17, a))
 
 
 # #### Tools
