@@ -1,9 +1,6 @@
 
 # coding: utf-8
 
-# In[24]:
-
-
 import os
 import sys
 import primer3
@@ -14,15 +11,9 @@ from Bio.Align import AlignInfo
 from Bio.Seq import Seq
 
 
-# #### Collect consensus regions longer then 19 bp
-
-# In[25]:
-
-
+#### Collect consensus regions longer then 17 bp
 
 align = AlignIO.read("DV4_all_cleanup.fasta","fasta") # change the filename and the file format to match you alignment result.
-
-
 summary_align = AlignInfo.SummaryInfo(align)
 consensus = summary_align.dumb_consensus(threshold=0.95,ambiguous='X') # 0.95  as the threshold of considered as consensus.
 
@@ -31,10 +22,7 @@ a = consensus.split('X')
 pr_list = list(filter(lambda x: len(x) > 17, a))
 
 
-# #### Tools
-
-# In[26]:
-
+#### Tools
 
 # OH for overhang of the primer
 OH = 'AAGCAGTGGTATCAACGCAGAGT'
@@ -46,10 +34,7 @@ def rc (my_sequence):
 	return "".join([my_dictionary[base] for base in reversed(my_sequence)])
 
 
-# #### Chop up the consensus regions and collect fragments between 18 and 24 bp as primers.
-
-# In[27]:
-
+#### Chop up the consensus regions and collect fragments between 18 and 24 bp as primers.
 
 full_list = []
 for i in pr_list:
@@ -59,10 +44,7 @@ for i in pr_list:
 				full_list.append(i[j:k])
 
 
-# #### Reverse complement the primers and test for criterias for TSO compatibility by Primer3. Select only the primers with Tm > 50. Remove any primers with "CC" or "TTT".
-
-# In[28]:
-
+#### Reverse complement the primers and test for criterias for TSO compatibility by Primer3. Select only the primers with Tm > 50. Remove any primers with "CC" or "TTT".
 
 rc_pr_list = []
 for i in full_list:
@@ -72,10 +54,7 @@ for i in full_list:
 		rc_pr_list.append(l)
 
 
-# #### Select the primers with least tendency to form heterodimers with TSO. dG > -3000 was chosen acccording to Fabio's DENV2 primer.
-
-# In[64]:
-
+#### Select the primers with least tendency to form heterodimers with TSO. dG > -3000 was chosen acccording to Fabio's DENV2 primer.
 
 dg_3000 = []
 for i in rc_pr_list:
@@ -101,10 +80,7 @@ dg_3000.to_excel(writer, sheet_name='Sheet1')
 writer.save()
 
 
-# #### DENV primers used in eLife paper for comparison.
-
-# In[11]:
-
+##### DENV primers used in eLife paper for comparison.
 
 DENV2 = 'AAGCAGTGGTATCAACGCAGAGTACGAACCTGTTGATTCAACAGC'
 
